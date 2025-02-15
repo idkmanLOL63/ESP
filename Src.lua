@@ -1,5 +1,5 @@
 getgenv().esp = {
-  enabled = false
+  enabled = false,
 }
 --bruh
 local Players = game:GetService("Players"):GetChildren()
