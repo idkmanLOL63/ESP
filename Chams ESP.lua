@@ -1,80 +1,55 @@
 getgenv().esp = {
   enabled = false,
-    FillColor = Color3.fromRGB(255, 255, 0)
-    OutlineColor = Color3.fromRGB(0, 0, 0)
 }
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+
+local Players = game:GetService("Players"):GetChildren()
+
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 
-local ChamsAdjustments = {
- Enabled = false,
- OutlineColor = Color3.fromRGB(255, 255, 255),
- OutlineTransparency = 0,
- FillColor = Color3.fromRGB(120, 255, 0),
- FillTransparency = 0,
- 
- Keybind = Enum.KeyCode.Z,
-}
+local highlight = Instance.new("Highlight")
 
-local function AddChams(v)
- if v and v.Character and not v.Character:FindFirstChild(v.Name.."_Chams") then
-  local ChamsESP = Instance.new("Highlight")
-  
-  ChamsESP.Name = v.Name.."_Chams"
-  
-  ChamsESP.OutlineColor = ChamsAdjustments.OutlineColor
-  ChamsESP.OutlineTransparency = ChamsAdjustments.OutlineTransparency
-  ChamsESP.FillColor = ChamsAdjustments.FillColor
-  ChamsESP.FillTransparency = ChamsAdjustments.FillTransparency
-  
-  ChamsESP.Parent = v.Character
-  ChamsESP.Adornee = v.Character
- end
+highlight.Name = "Highlight"
+
+local function getCharacter(player)
+    return
+    workspace:FindFirstChild(player.Name)
 end
 
-local function UpdateChams(v)
- if v and v.Character and v.Character:FindFirstChild(v.Name.."_Chams") then
-  local ChamsESP = v.Character:FindFirstChild(v.Name.."_Chams")
-  ChamsESP.Enabled = ChamsAdjustments.Enabled
-  ChamsESP.OutlineColor = ChamsAdjustments.OutlineColor
-  ChamsESP.OutlineTransparency = ChamsAdjustments.OutlineTransparency
-  ChamsESP.FillColor = ChamsAdjustments.FillColor
-  ChamsESP.FillTransparency = ChamsAdjustments.FillTransparency
- end
+for i, v in pairs(Players) do
+    repeat wait() until getCharacter(v)
+    if not getCharacter(v):FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+        local highlightClone = highlight:Clone()
+        highlightClone.Adornee = getCharacter(v)
+        highlightClone.Parent = getCharacter(v):FindFirstChild("HumanoidRootPart")
+        highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        highlightClone.Name = "Highlight"
+    end
 end
 
-local function RemoveChams(v)
- if v and v.Character and v.Character:FindFirstChild(v.Name.."_Chams") then
-  v.Character:FindFirstChild(v.Name.."_Chams"):Destroy()
- end
-end
-
-UserInputService.InputBegan:Connect(function(Key)
- if Key.KeyCode == ChamsAdjustments.Keybind and UserInputService:GetFocusedTextBox() == nil then
-  ChamsAdjustments.Enabled = not ChamsAdjustments.Enabled
- end
+game.Players.PlayerAdded:Connect(function(player)
+    repeat wait() until getCharacter(v)
+    if not getCharacter(v):FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+        local highlightClone = highlight:Clone()
+        highlightClone.Adornee = getCharacter(v)
+        highlightClone.Parent = getCharacter(v):FindFirstChild("HumanoidRootPart")
+        highlightClone.Name = "Highlight"
+    end
 end)
 
-RunService.Stepped:Connect(function()
- if ChamsAdjustments.Enabled == true then
-  for _,v in pairs(Players:GetPlayers()) do
-   if v ~= LocalPlayer and v.Character then
-    if not v.Character:FindFirstChild(v.Name.."_Chams") then
-     AddChams(v)
-    elseif v.Character:FindFirstChild(v.Name.."_Chams") then
-     UpdateChams(v)
-    end
-   end
-  end
- elseif ChamsAdjustments.Enabled == false then
-  for _,v in pairs(Players:GetPlayers()) do
-   if v ~= LocalPlayer and v.Character then
-    if v.Character:FindFirstChild(v.Name.."_Chams") then
-     RemoveChams(v)
-    end
-   end
-  end
- end
+game.Players.PlayerRemoving:Connect(function(playerRemoved)
+    playerRemoved.Character:FindFirstChild("HumanoidRootPart").Highlight:Destroy()
+end)
+
+RunService.Heartbeat:Connect(function()
+    for i, v in pairs(Players) do
+        repeat wait() until getCharacter(v)
+        if not getCharacter(v):FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+            local highlightClone = highlight:Clone()
+            highlightClone.Adornee = getCharacter(v)
+            highlightClone.Parent = getCharacter(v):FindFirstChild("HumanoidRootPart")
+            highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            highlightClone.Name = "Highlight"
+            task.wait()
+        end
+end
 end)
