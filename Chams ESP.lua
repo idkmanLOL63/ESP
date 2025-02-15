@@ -1,3 +1,8 @@
+getgenv().esp = {
+  enabled = false,
+    FillColor = Color3.fromRGB(255, 255, 0)
+    OutlineColor = Color3.fromRGB(0, 0, 0)
+}
 local function highlightPlayer(player)
     if player.Character then
         local highlight = Instance.new("Highlight")
